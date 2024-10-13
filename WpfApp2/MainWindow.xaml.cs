@@ -11,53 +11,50 @@ namespace WpfApp2
 {
     public partial class MainWindow : Window
     {
-        private Point startPoint;
-        private bool isSelecting;
-        private Rectangle selectionRectangle;
-
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void AboutMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            Ink.Strokes.Clear();
+            MessageBox.Show(@"Меня зовут: я прихожу, 
+Если не зовут, не прихожу", "О разработчике", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ColorItem_Click(object sender, RoutedEventArgs e)
         {
-            if (comboBox.SelectedItem is ComboBoxItem selectedItem)
+            if (sender is MenuItem menuItem)
             {
-                Color selectedColor = ((SolidColorBrush)selectedItem.Background).Color;
-                Ink.DefaultDrawingAttributes.Color = selectedColor;
+                if (menuItem.Header.ToString() == "Black")
+                {
+                    Ivan.Foreground = new SolidColorBrush(Colors.White);
+                }
+                else
+                {
+
+                    Ivan.Foreground = new SolidColorBrush(Colors.Black);
+                }
+
+                Menuu.Background = (Brush)new BrushConverter().ConvertFromString(menuItem.Header.ToString());
             }
         }
 
-        private void SliderMoi_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void CloseMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            Propper.Height = e.NewValue * 2;
-            Propper.Width = e.NewValue * 2;
+            this.Close();
         }
-
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        private void MenuItem_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            if (RadioDraw.IsChecked == true)
+            if (sender is MenuItem menuItem)
             {
-                Ink.EditingMode = InkCanvasEditingMode.Ink;
-            }
-            else if (RadioEdit.IsChecked == true)
-            {
-                Ink.EditingMode = InkCanvasEditingMode.Select;
-            }
-            else if (RadioDelete.IsChecked == true)
-            {
-                Ink.EditingMode = InkCanvasEditingMode.EraseByStroke;
+                StatusText.Text = $"Выберите {menuItem.Header}";
             }
         }
 
-     
-
-
+        private void MenuItem_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            StatusText.Text = "Тут интересно"; // или пустую строку, если хотите
+        }
     }
 }
